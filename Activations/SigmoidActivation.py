@@ -1,10 +1,11 @@
 import numpy as np
 
-from Losses.LossBase import LossBase
+from Activations.ActivationBase import ActivationBase
 
-class SigmoidLoss(LossBase):
+class SigmoidActivation(ActivationBase):
     def __init__(self):
-        super().__init__()
+        #super().__init__()
+        pass
 
     def get_activation_value(self, pre_activations):
         return 1.0 / (1.0 + np.exp(-pre_activations))

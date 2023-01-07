@@ -1,5 +1,6 @@
-from Networks.Network import DenseNetwork
-from Losses.SigmoidLoss import SigmoidLoss
+from Networks.Dense import DenseNetwork
+from Activations.SigmoidActivation import SigmoidActivation
+from Losses.MeanSquaredError import MeanSquaredError
 
 import numpy as np
 import random
@@ -51,7 +52,7 @@ testing_data = np.array(testing_data)
 print(np.shape(training_data[0][0]))
 print(np.shape(training_data[0][1]))
 
-network = DenseNetwork([4, 9], SigmoidLoss(), 1)
+network = DenseNetwork([4, 9], MeanSquaredError(), SigmoidActivation())
 network.compile()
 
 result = network.feedforward(training_data[0][0])

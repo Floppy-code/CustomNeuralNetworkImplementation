@@ -12,7 +12,7 @@ import tkinter.ttk as ttk
 from tkinter.filedialog import askopenfilename
 from threading import Thread
 
-from Networks.Network import DenseNetwork
+from Networks.Dense import DenseNetwork
 
 #PROJECT_PATH = pathlib.Path(__file__).parent
 #PROJECT_UI = PROJECT_PATH / "Praca_1.ui"

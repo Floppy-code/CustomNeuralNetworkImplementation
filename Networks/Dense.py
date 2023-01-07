@@ -1,7 +1,8 @@
 import numpy as np
 import pickle
-from threading import Thread
-import random
+
+from Losses.LossBase import LossBase
+from Activations.ActivationBase import ActivationBase
 
 class DenseNetwork:
     """An implementation of Neural Network based on SGD with sigmoid activation function"""
@@ -33,7 +34,7 @@ class DenseNetwork:
 
     def feedforward(self, x):
         for weight_l, bias_l in zip(self.weights, self.biases):
-            x = self.loss_function.get_activation_value(np.dot(weight_l, x) + bias_l)
+            x = self.activation.get_activation_value(np.dot(weight_l, x) + bias_l)
     
         return x
 
@@ -51,20 +52,20 @@ class DenseNetwork:
         for weight_l, bias_l in zip(self.weights, self.biases):
             z = np.dot(weight_l, activation) + bias_l
             pre_activations.append(z)
-            activation = self.loss_function.get_activation_value(z)
+            activation = self.activation.get_activation_value(z)
             activations.append(activation)
         
         #Calculate error gradient for last layer of neurons
-        error_gradient = (activations[-1] - y) * self.loss_function.get_activation_derivative(pre_activations[-1])
-        delta_w[-1] = error_gradient @ activations[-2].T
-        delta_b[-1] = error_gradient
+        error_gradient = self.loss_function.error_gradient_last(activations, pre_activations, y, self.activation)
+        delta_w[-1] = self.loss_function.delta_w(error_gradient, activations, -2)
+        delta_b[-1] = self.loss_function.delta_b(error_gradient)
 
         for l in range(2, len(self.sizes)):
             z = pre_activations[-l]
-            sp = self.loss_function.get_activation_derivative(z)
-            error_gradient = np.dot(self.weights[-l + 1].transpose(), error_gradient) * sp
-            delta_w[-l] = np.dot(error_gradient, activations[-l - 1].transpose())
-            delta_b[-l] = error_gradient
+            sp = self.activation.get_activation_derivative(z)
+            error_gradient = self.loss_function.error_gradient_layer(self.weights, error_gradient, sp, -l + 1)
+            delta_w[-l] = self.loss_function.delta_w(error_gradient, activations, -l - 1)
+            delta_b[-l] = self.loss_function.delta_b(error_gradient)
 
         return (delta_w, delta_b)
     
