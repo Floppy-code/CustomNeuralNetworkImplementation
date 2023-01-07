@@ -1,0 +1,2 @@
+Spustenie cez subor
+NeuralNetworkGUI.py
