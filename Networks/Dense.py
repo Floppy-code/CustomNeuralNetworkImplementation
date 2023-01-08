@@ -113,7 +113,7 @@ class DenseNetwork:
                 
             
             e_res = self.evaluate(testing_data)
-            evaluation.append(e_res)
+            evaluation.append((self.evaluate(training_data), e_res))
             print(' val_loss: {:.5f} val_acc: {:.2f}'.format(e_res[0], e_res[1]), end = '') #Console
             
             #GUI text output
